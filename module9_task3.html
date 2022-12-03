@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>module9_task3</title>
+    <style>
+        body {
+            padding: 20px 20px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            margin-left: 20px;
+        }
+
+        .label {
+            display: flex;
+            align-items: center;
+            margin: 10px 20px;
+            width: 175px;
+        }
+
+        .label_title {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .label_input {
+            padding: 0 5px;
+            border-radius: 2px;
+            border: 2px solid #800080;
+            width: 40px;
+            height: 25px;
+        }
+
+        .button {
+            font-weight: bold;
+            padding: 0;
+            margin-left: 20px;
+            width: 175px;
+            height: 35px;
+            border-radius: 2px;
+            background: #ff69b4;
+            border: 2px solid #800080;
+            cursor: pointer;
+        }
+
+        .button:active {
+            transform: scale(0.95);
+        }
+
+        .result {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            width: 500px;
+        }
+
+        .card {
+            width: 200px;
+            margin: 20px;
+        }
+
+        .card-image {
+            display: block;
+            width: 200px;
+            height: 150px;
+        }
+
+        .card p {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Задание 3</h2>
+    <div class="label">
+        <label for="num" class="label_title">Введите число:</label>
+        <input class="label_input" type="number" id="num" name="num">
+    </div>
+    <button class="button">Запрос</button>
+    <div class="result"></div>
+</body>
+<script>
+    const inputNode = document.querySelector('.label_input');
+    const resultNode = document.querySelector('.result');
+    const btnNode = document.querySelector('.button');
+
+    function useRequest(limit, callback) {
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', limit, true);
+
+        xhr.onload = function () {
+            if (inputNode.value < 1 || inputNode.value > 10) {
+                resultNode.innerHTML = 'Число вне диапазона от 1 до 10';
+            } else {
+                const result = JSON.parse(xhr.response);
+                if (callback) {
+                    callback(result);
+                }
+            }
+        };
+
+        xhr.send();
+    };
+
+    function displayResult(apiData) {
+        let cards = '';
+
+        apiData.forEach(item => {
+            const cardBlock = `
+      <div class="card">
+        <img src="${item.download_url}" class="card-image"/>
+        <p>${item.author}</p>
+      </div>
+    `;
+            cards = cards + cardBlock;
+        });
+
+        resultNode.innerHTML = cards;
+    }
+
+    btnNode.addEventListener('click', () => {
+        useRequest(`https://picsum.photos/v2/list/?limit=${inputNode.value}`, displayResult);
+    })
+
+</script>
+
+</html>

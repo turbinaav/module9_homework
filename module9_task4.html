@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>module9_task4</title>
+    <style>
+        body {
+            padding: 20px 20px;
+            margin: 0 auto;
+        }
+
+        .input {
+            display: flex;
+            flex-direction: column;
+            margin: 10px 0;
+            width: 190px;
+        }
+
+        .input_label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .label_title {
+            margin-right: 12px;
+            font-weight: bold;
+        }
+
+        .label_input {
+            padding: 0 5px;
+            border-radius: 2px;
+            border: 2px solid #800080;
+            width: 40px;
+            height: 25px;
+        }
+
+        .button {
+            font-weight: bold;
+            padding: 0;
+            width: 190px;
+            height: 35px;
+            border-radius: 2px;
+            background: #ff69b4;
+            border: 2px solid #800080;
+            cursor: pointer;
+        }
+
+        .button:active {
+            transform: scale(0.95);
+        }
+
+        .result {
+            margin-top: 20px;
+        }
+
+        .card {
+            display: block;
+            width: 200px;
+            height: 150px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Задание 4</h2>
+    <div class="input">
+        <div class="input_label">
+            <label for="name_1" class="label_title">Введите число 1:</label>
+            <input class="label_input input_1" type="text" id="name_1" name="name_1">
+        </div>
+        <div class="input_label">
+            <label for="name_2" class="label_title">Введите число 2:</label>
+            <input class="label_input input_2" type="text" id="name_2" name="name_2">
+        </div>
+    </div>
+    <button class="button btn">Запрос</button>
+    <div class="result res"></div>
+</body>
+<script>
+    const inputNode1 = document.querySelector('.input_1');
+    const inputNode2 = document.querySelector('.input_2');
+    const resultNode = document.querySelector('.res');
+    const btnNode = document.querySelector('.btn');
+
+    btnNode.addEventListener('click', () => {
+        let input_1 = inputNode1.value;
+        let input_2 = inputNode2.value;
+
+        function inputIsNaN() {
+            if (isNaN(+input_1) || isNaN(+input_2)) {
+                return true;
+            }
+        }
+
+        if ((input_1 < 100 || input_1 > 300) || (input_2 < 100 || input_2 > 300) || inputIsNaN()) {
+            resultNode.innerHTML = 'Одно из чисел вне диапазона от 100 до 300';
+        } else {
+            fetch(`https://picsum.photos/${input_1}/${input_2}`)
+                .then((response) => {
+                    resultNode.innerHTML = `<img src="${response.url}" class="card">`;
+                })
+                .catch(() => { console.log('error') });
+        };
+    });
+</script>
+
+</html>
